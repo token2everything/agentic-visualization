@@ -11,7 +11,7 @@
   <a href="https://coda-agent.github.io/CoDA/">
     <img src="https://img.shields.io/badge/Project-Page-blue.svg" alt="Project Page">
   </a>
-  <a href="https://github.com/coda-agent/CoDA">
+  <a href="https://github.com/google-research/agentic-visualization">
     <img src="https://img.shields.io/badge/Code-GitHub-black.svg" alt="GitHub">
   </a>
   <img src="https://img.shields.io/badge/ICLR-2026-green.svg" alt="ICLR 2026">
