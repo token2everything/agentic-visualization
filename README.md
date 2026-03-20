@@ -88,8 +88,8 @@ CoDA's self-reflection loop detected layout and labeling errors across 3 iterati
 **Requirements:** Python ≥ 3.8 and API credentials for at least one LLM provider.
 
 ```bash
-git clone https://github.com/coda-agent/CoDA.git
-cd CoDA
+git clone https://github.com/google-research/agentic-visualization.git
+cd agentic-visualization
 pip install -r requirements.txt
 ```
 
