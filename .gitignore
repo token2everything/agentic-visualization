@@ -1,0 +1,20 @@
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment
+.env
+
+# Logs
+*.log
+
+# Pipeline outputs (generated at runtime)
+generated_code.py
+result.png
+benchmark_outputs/
+evaluation_results*/
+outputs/
+
+# Data
+matplotbench_data/
+benchmark_data/

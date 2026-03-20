@@ -1,0 +1,212 @@
+# CoDA Configuration Example
+# Copy this file to config.yaml and customize as needed
+
+# Project settings
+project_name: "CoDA"
+version: "1.0.0"
+environment: "development"
+
+# LLM configuration (Powered by LiteLLM)
+llm:
+  model: ""
+  temperature: 0.7
+  max_tokens: 8192
+  timeout: 1000
+  max_retries: 3
+
+# Quality assessment configuration
+quality:
+  threshold: 0.85                     # Quality threshold (0.0-1.0)
+  metrics:
+    - "human_readability"
+    - "aesthetic_quality"
+    - "information_clarity"
+    - "accessibility"
+    - "user_experience"
+  weights:
+    human_readability: 0.25
+    aesthetic_quality: 0.20
+    information_clarity: 0.25
+    accessibility: 0.15
+    user_experience: 0.15
+  human_perspective_enabled: true    # Enable human perspective evaluation
+
+# Workflow configuration
+workflow:
+  max_iterations: 3                  # Maximum workflow iterations
+  max_debug_iterations: 3            # Maximum debug iterations per code generation
+  parallel_processing: true         # Enable parallel processing
+  ensemble_size: 3                   # Number of agents in ensemble
+  voting_strategy: "weighted_majority"
+  timeout_per_iteration: 300.0      # Timeout per iteration in seconds
+  timeout_per_agent: 1000.0          # Timeout per agent in seconds
+  memory_limit_mb: 2048             # Memory limit in MB
+  enable_feedback_loop: true        # Enable feedback loop mechanism
+  save_intermediate_results: true   # Save intermediate results
+
+# Logging configuration
+logging:
+  level: "INFO"                      # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_path: "logs/coda.log"
+  max_file_size_mb: 10
+  backup_count: 5
+  console_output: true
+
+# Storage configuration
+storage:
+  base_path: "data"
+  cache_enabled: true
+  cache_ttl_seconds: 3600
+  max_cache_size_mb: 100
+  backup_enabled: true
+  compression_enabled: true
+
+# Experiment configuration
+experiment:
+  name: "default_experiment"
+  description: "Default experiment configuration"
+  save_intermediate_results: true
+  save_failed_attempts: true
+  result_format: "json"
+  output_directory: "experiments/results"
+
+agents:
+  query_analyzer:
+    name: "query_analyzer"
+    persona: "Dr. Sarah Chen - MIT PhD in Computational Linguistics"
+    model: ""
+    temperature: 0.7
+    max_tokens: 8192
+    timeout: 30.0
+    max_retries: 3
+    specialization: "Query understanding, intent analysis, and task decomposition"
+    personality_traits:
+      - "analytical"
+      - "thorough"
+      - "systematic"
+    specialized_skills:
+      - "query_parsing"
+      - "intent_recognition"
+      - "todo_list_generation"
+      - "context_expansion"
+  
+  data_processor:
+    name: "data_processor"
+    persona: "Prof. Marcus Rodriguez - Stanford Statistics PhD"
+    model: ""
+    temperature: 0.7
+    max_tokens: 8192
+    timeout: 30.0
+    max_retries: 3
+    specialization: "Data processing, statistical analysis, and data quality assessment"
+    personality_traits:
+      - "meticulous"
+      - "efficient"
+      - "detail_oriented"
+    specialized_skills:
+      - "data_cleaning"
+      - "preprocessing"
+      - "validation"
+      - "statistical_analysis"
+  
+  design_explorer:
+    name: "design_explorer"
+    persona: "Isabella Nakamura - RISD MFA, Apple Senior Designer"
+    model: ""
+    temperature: 0.8  # Higher temperature for creativity
+    max_tokens: 8192
+    timeout: 30.0
+    max_retries: 3
+    specialization: "Visual design, user experience, and aesthetic innovation"
+    personality_traits:
+      - "creative"
+      - "innovative"
+      - "experimental"
+    specialized_skills:
+      - "design_generation"
+      - "aesthetic_evaluation"
+      - "user_experience_design"
+      - "trend_analysis"
+  
+  code_generator:
+    name: "code_generator"
+    persona: "Alex Thompson - CMU CS MS, Microsoft Engineer"
+    model: ""
+    temperature: 0.5  # Lower temperature for code generation
+    max_tokens: 8192
+    timeout: 30.0
+    max_retries: 3
+    specialization: "High-quality code generation, software architecture, and performance optimization"
+    personality_traits:
+      - "precise"
+      - "logical"
+      - "methodical"
+    specialized_skills:
+      - "code_generation"
+      - "debugging"
+      - "optimization"
+      - "software_architecture"
+  
+  debug_agent:
+    name: "debug_agent"
+    persona: "Jordan Martinez - Senior DevOps Engineer & Debugging Specialist"
+    model: ""
+    temperature: 0.6
+    max_tokens: 8192
+    timeout: 30.0
+    max_retries: 3
+    specialization: "Code execution, debugging, performance optimization, and environment management"
+    personality_traits:
+      - "systematic"
+      - "problem_solving"
+      - "thorough"
+    specialized_skills:
+      - "code_execution"
+      - "error_diagnosis"
+      - "performance_optimization"
+      - "environment_management"
+    enable_web_search: true          # Enable web search for complex debugging
+    max_search_results: 5            # Maximum search results to consider
+  
+  visual_evaluator:
+    name: "visual_evaluator"
+    persona: "Dr. Elena Vasquez - Harvard Psychology PhD, Adobe UX Researcher"
+    model: ""
+    temperature: 0.7
+    max_tokens: 8192
+    timeout: 30.0
+    max_retries: 3
+    specialization: "Human perception, visual cognition, user experience design, and accessibility"
+    personality_traits:
+      - "empathetic"
+      - "analytical"
+      - "user_focused"
+    specialized_skills:
+      - "human_perception_analysis"
+      - "visual_evaluation"
+      - "accessibility_assessment"
+      - "user_experience_optimization"
+
+# Debug environment configuration
+debug_environment:
+  timeout: 30                        # Code execution timeout in seconds
+  max_memory_mb: 500                 # Maximum memory usage in MB
+  temp_dir: "/tmp/debug_agent"       # Temporary directory for execution
+  allowed_imports:
+    - "matplotlib"
+    - "matplotlib.pyplot"
+    - "pandas"
+    - "numpy"
+    - "seaborn"
+    - "plotly"
+    - "math"
+    - "datetime"
+    - "os"
+  restricted_functions:
+    - "exec"
+    - "eval"
+    - "compile"
+    - "open"
+    - "file"
+    - "__import__" 
