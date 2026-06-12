@@ -117,9 +117,23 @@ class DebugAgent(BaseAgent):
         
         # Use debug_and_fix method
         try:
-            fixed_code = self.debug_and_fix(code_text, error_msg, max_attempts=3)
-            if fixed_code != code_text:
-                # Re-execute the fixed code
+            # debug_and_fix may return either a string (fixed code) or a dict
+            debug_fix_result = self.debug_and_fix(code_text, error_msg, max_attempts=3)
+            fixed_code = None
+            exec_result_from_fix = None
+
+            if isinstance(debug_fix_result, dict):
+                fixed_code = debug_fix_result.get('fixed_code')
+                exec_result_from_fix = debug_fix_result.get('execution_result')
+            else:
+                fixed_code = debug_fix_result
+
+            # If the debug function already produced an ExecutionResult, return it directly
+            if isinstance(exec_result_from_fix, ExecutionResult):
+                return exec_result_from_fix
+
+            # If we obtained fixed code string, re-run it
+            if isinstance(fixed_code, str) and fixed_code and fixed_code != code_text:
                 py_filepath = "generated_code.py"  # Always use generated_code.py to match code_generator
                 return self.run_python_code(
                     code_text=fixed_code,
@@ -270,6 +284,25 @@ class DebugAgent(BaseAgent):
                 # For benchmark data, intelligently detect and replace incorrect file paths
                 code_text = self._intelligent_file_path_replacement(code_text, data_file_path)
         
+        # Ensure code_text is a string. If a dict (from debug helper), try to extract common keys.
+        if not isinstance(code_text, str):
+            if isinstance(code_text, dict):
+                for key in ('fixed_code', 'generated_code', 'code', 'code_text'):
+                    candidate = code_text.get(key)
+                    if isinstance(candidate, str):
+                        code_text = candidate
+                        break
+
+        if not isinstance(code_text, str):
+            self.logger.error("run_python_code received non-string code_text; cannot write to file.")
+            return ExecutionResult(
+                returncode=-1,
+                stdout="",
+                stderr="Failed to write code to file: code_text is not a string",
+                execution_time=0,
+                success=False
+            )
+
         # Write the Python code to the file
         try:
             with open(py_filepath, 'w', encoding='utf-8') as f:

@@ -1140,9 +1140,24 @@ class WorkflowOrchestrator:
                 with open(iteration_dir / "generated_code.py", 'w') as f:
                     f.write(iteration.code_generation_result.generated_code)
 
-            if hasattr(iteration.debug_result, 'fixed_code') and iteration.debug_result.fixed_code and iteration.debug_result.fixed_code != iteration.code_generation_result.generated_code:
+            # Safely handle fixed_code: it may be None, a string, or (unexpectedly) a dict
+            fixed_code_val = None
+            if hasattr(iteration.debug_result, 'fixed_code'):
+                fixed_code_val = iteration.debug_result.fixed_code
+
+            # If a dict was stored for some reason, try to extract common string keys
+            if isinstance(fixed_code_val, dict):
+                for key in ('fixed_code', 'code', 'generated_code'):
+                    if isinstance(fixed_code_val.get(key), str):
+                        fixed_code_val = fixed_code_val.get(key)
+                        break
+
+            if isinstance(fixed_code_val, str) and fixed_code_val and (
+                not iteration.code_generation_result or
+                fixed_code_val != iteration.code_generation_result.generated_code
+            ):
                 with open(iteration_dir / "fixed_code.py", 'w') as f:
-                    f.write(iteration.debug_result.fixed_code)
+                    f.write(fixed_code_val)
             
             # Copy output image if available
             if iteration.debug_result.output_file and os.path.exists(iteration.debug_result.output_file):
